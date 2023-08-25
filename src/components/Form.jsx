@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Stack,
@@ -18,28 +18,49 @@ const Form = () => {
     handleSubmit,
     trigger,
     formState: { errors },
+    reset,
   } = useForm();
 
   const [statusMessage, setStatusMessage] = useState("");
   const [submissionMessage, setSubmissionMessage] = useState("");
 
-  const [speed, setSpeed] = useState(2);
+  const [speed, setSpeed] = useState(null);
 
   const onSubmit = async (data) => {
     try {
-      setSpeed(5);
       const response = await axios.post(
         "https://europe-west1-octue-amy.cloudfunctions.net/frontend-developer-case-study",
         {
           message: data,
         }
       );
-      console.log("Succesful: ", response.data);
-      setSpeed(2);
+      setSpeed(10);
+
+      console.log("Successful: ", response.data);
+      setStatusMessage("Windmill is fired up :)");
+      setSubmissionMessage("Submitted Successfully");
+      reset();
+
+      setTimeout(() => {
+        setSpeed(2);
+        setStatusMessage("");
+        setSubmissionMessage("");
+      }, 5000);
     } catch (error) {
       console.error("Error submitting form:", error);
+      setSpeed(0);
+      setStatusMessage("The windmill broke down :(");
+      setSubmissionMessage("Submission Failed");
+
+      // Set a timer to revert the speed back to 2 after 5 seconds
+      setTimeout(() => {
+        setSpeed(2);
+        setStatusMessage("");
+        setSubmissionMessage("");
+      }, 5000);
     }
   };
+
   return (
     <Container>
       <Stack
@@ -110,7 +131,12 @@ const Form = () => {
                 onBlur={() => trigger("no_turbines")}
               />
 
-              <Button fullWidth variant="contained" type="submit">
+              <Button
+                fullWidth
+                variant="contained"
+                type="submit"
+                sx={{ padding: 2, fontWeight: "600", fontStyle: "bold" }}
+              >
                 <Typography variant="body1">Submit</Typography>
               </Button>
             </Stack>
@@ -126,14 +152,32 @@ const Form = () => {
             backgroundColor: "primary.main",
           }}
         >
-          <Player
-            src={Windmill}
-            className="player"
-            loop
-            autoplay
-            speed={speed}
-            style={{ width: "100%", height: "auto" }}
-          />
+          <Stack direction="column">
+            <Player
+              src={Windmill}
+              className="player"
+              loop
+              autoplay
+              speed={speed}
+              key={speed}
+              style={{ width: "100%", height: "auto" }}
+            />
+
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{ mt: 2, color: "white" }}
+            >
+              {statusMessage}
+            </Typography>
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{ mt: 1, color: "white" }}
+            >
+              {submissionMessage}
+            </Typography>
+          </Stack>
         </Box>
       </Stack>
     </Container>
