@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Stack,
@@ -85,12 +85,7 @@ const Form = () => {
             Please enter your Information
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack gap={3}>
-              {errors.name?.message && (
-                <Typography variant="body1" sx={{ color: "red" }}>
-                  {errors.name?.message}
-                </Typography>
-              )}
+            <Stack>
               <TextField
                 fullWidth
                 id="name"
@@ -106,13 +101,16 @@ const Form = () => {
                   },
                 })}
                 onBlur={() => trigger("name")}
+                sx={{ mt: 3 }}
               />
 
-              {errors.no_turbines?.message && (
-                <Typography variant="body1" sx={{ color: "red" }}>
-                  {errors.no_turbines?.message}
-                </Typography>
-              )}
+              <Typography
+                variant="body1"
+                sx={{ color: "red", mt: errors.name ? { gap: 0 } : 3 }}
+              >
+                {errors.name?.message || " "}
+              </Typography>
+
               <TextField
                 fullWidth
                 id="no_turbine"
@@ -129,7 +127,18 @@ const Form = () => {
                   },
                 })}
                 onBlur={() => trigger("no_turbines")}
+                sx={{ mt: 3 }}
               />
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "red",
+                  mt: errors.no_turbines ? { md: 0 } : 3,
+                  mb: errors.no_turbines ? { md: 3 } : 3,
+                }}
+              >
+                {errors.no_turbines?.message || " "}
+              </Typography>
 
               <Button
                 fullWidth
@@ -145,7 +154,7 @@ const Form = () => {
         <Box
           sx={{
             width: { xs: "100%", md: "40%" },
-            height: { xs: "50vh", md: "80%" },
+            height: { xs: "50vh", md: "90%" },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -153,6 +162,13 @@ const Form = () => {
           }}
         >
           <Stack direction="column">
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{ mt: 2, color: "white" }}
+            >
+              {statusMessage}
+            </Typography>
             <Player
               src={Windmill}
               className="player"
@@ -162,18 +178,10 @@ const Form = () => {
               key={speed}
               style={{ width: "100%", height: "auto" }}
             />
-
             <Typography
               variant="h6"
               align="center"
-              sx={{ mt: 2, color: "white" }}
-            >
-              {statusMessage}
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              sx={{ mt: 1, color: "white" }}
+              sx={{ color: "white", mb: 2 }}
             >
               {submissionMessage}
             </Typography>
