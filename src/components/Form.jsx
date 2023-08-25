@@ -1,193 +1,142 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Stack,
   Typography,
   Button,
-  Container,
-  Input,
   TextField,
+  Container,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Windmill from "../animations/windmill.json";
-
 import { Player } from "@lottiefiles/react-lottie-player";
+import axios from "axios";
 
 const Form = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    trigger,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [submissionMessage, setSubmissionMessage] = useState("");
 
-  const [service, setService] = React.useState("");
+  const [speed, setSpeed] = useState(2);
 
-  const handleChange = (event) => {
-    setService(event.target.value);
+  const onSubmit = async (data) => {
+    try {
+      setSpeed(5);
+      const response = await axios.post(
+        "https://europe-west1-octue-amy.cloudfunctions.net/frontend-developer-case-study",
+        {
+          message: data,
+        }
+      );
+      console.log("Succesful: ", response.data);
+      setSpeed(2);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
-
   return (
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      gap={1}
-      height="95vh"
-      width="70vw"
-      mx="auto"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Box
-        sx={{
-          width: "80%",
-          height: "80%",
-        }}
+    <Container>
+      <Stack
+        direction={{ xs: "column", sm: "column", md: "row" }}
+        gap={4}
+        height="95vh"
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        spacing={4}
+        flex={1}
       >
-        <Typography variant="h5" pb={2}>
-          Please enter your Information
-        </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack gap={3}>
-            {errors.name?.message && (
-              <Typography variant="body1" sx={{ color: "red" }}>
-                {errors.name?.message}
-              </Typography>
-            )}
-            <TextField
-              id="name"
-              label="Name"
-              variant="outlined"
-              placeholder="John Doe"
-              {...register(
-                "name",
-                {
+        <Box
+          sx={{
+            width: { xs: "100%", md: "40%" },
+            padding: 3,
+            boxShadow: 3,
+            backgroundColor: "background.default",
+          }}
+        >
+          <Typography variant="h5" pb={2} textAlign="center">
+            Please enter your Information
+          </Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack gap={3}>
+              {errors.name?.message && (
+                <Typography variant="body1" sx={{ color: "red" }}>
+                  {errors.name?.message}
+                </Typography>
+              )}
+              <TextField
+                fullWidth
+                id="name"
+                label="Name"
+                variant="outlined"
+                placeholder="John Doe"
+                {...register("name", {
                   required: "Name is Required",
-                  maxLength: 20,
-                },
-                { pattern: /^[A-Za-z\s]+$/i }
-              )}
-            />
-            {errors.email?.message && (
-              <Typography variant="body1" sx={{ color: "red" }}>
-                {errors.email?.message}
-              </Typography>
-            )}
-            <TextField
-              id="email"
-              label="Email Id"
-              variant="outlined"
-              placeholder="john@gmail.com"
-              {...register(
-                "email",
-                {
-                  required: " Email ID is Required",
-                  maxLength: 35,
-                },
-                { pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i }
-              )}
-            />
-            {errors.no_turbines?.message && (
-              <Typography variant="body1" sx={{ color: "red" }}>
-                {errors.no_turbines?.message}
-              </Typography>
-            )}
-            <TextField
-              id="no_turbine"
-              label="Number of Turbines"
-              variant="outlined"
-              placeholder="Ex: 100"
-              {...register(
-                "no_turbines",
-                {
-                  required: "A Number is Required",
-                  maxLength: 5,
-                  minLenght: 1,
-                },
-                { pattern: /^\d+$/ }
-              )}
-            />
-            {errors.project_name?.message && (
-              <Typography variant="body1" sx={{ color: "red" }}>
-                {errors.project_name?.message}
-              </Typography>
-            )}
-            <TextField
-              id="project_name"
-              label="Project Name"
-              variant="outlined"
-              placeholder="Ex: Turbine Tickle Fields,Whimsy Winds "
-              {...register(
-                "project_name",
-                {
-                  required: "Project Name is Required",
-                  maxLength: 30,
-                },
-                { pattern: /^[A-Za-z0-9\s]+$/i }
-              )}
-            />
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                {errors.service?.message && (
-                  <Typography variant="body1" sx={{ color: "red" }}>
-                    {errors.service?.message}
-                  </Typography>
-                )}
-                <InputLabel id="service">Service Type</InputLabel>
-                <Select
-                  labelId="service"
-                  id="service"
-                  value={service}
-                  label="Service Type"
-                  onChange={handleChange}
-                  {...register("service", {
-                    required: "Service Type is Required",
-                  })}
-                >
-                  <MenuItem value={"Site Prospecting"}>
-                    Site Prospecting
-                  </MenuItem>
-                  <MenuItem value={" Wind Measurements"}>
-                    Wind Measurements
-                  </MenuItem>
-                  <MenuItem value={"Energy Production Assessments"}>
-                    Energy Production Assessments
-                  </MenuItem>
-                  <MenuItem value={"Design and Development Services"}>
-                    Design and Development Services
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+                  maxLength: { value: 20, message: "Max length is 20" },
+                  pattern: {
+                    value: /^[A-Za-z\s]+$/i,
+                    message: "Only letters are allowed",
+                  },
+                })}
+                onBlur={() => trigger("name")}
+              />
 
-            <Button variant="contained" type="submit">
-              <Typography variant="body1">Submit</Typography>
-            </Button>
-          </Stack>
-        </form>
-      </Box>
-      <Box
-        sx={{
-          width: "80%",
-          height: "80%",
-          backgroundColor: "primary.main",
-        }}
-      >
-        <Player
-          src={Windmill}
-          className="player"
-          loop
-          autoplay
-          speed={2}
-          style={{ alignItems: "center", justifyContent: "center" }}
-        />{" "}
-      </Box>
-    </Stack>
+              {errors.no_turbines?.message && (
+                <Typography variant="body1" sx={{ color: "red" }}>
+                  {errors.no_turbines?.message}
+                </Typography>
+              )}
+              <TextField
+                fullWidth
+                id="no_turbine"
+                label="Number of Turbines"
+                variant="outlined"
+                placeholder="Ex: 100"
+                {...register("no_turbines", {
+                  required: "A Number is Required",
+                  maxLength: { value: 5, message: "Max length is 5" },
+                  minLength: { value: 1, message: "Min length is 1" },
+                  pattern: {
+                    value: /^\d+$/,
+                    message: "Only numbers are allowed",
+                  },
+                })}
+                onBlur={() => trigger("no_turbines")}
+              />
+
+              <Button fullWidth variant="contained" type="submit">
+                <Typography variant="body1">Submit</Typography>
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "40%" },
+            height: { xs: "50vh", md: "80%" },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "primary.main",
+          }}
+        >
+          <Player
+            src={Windmill}
+            className="player"
+            loop
+            autoplay
+            speed={speed}
+            style={{ width: "100%", height: "auto" }}
+          />
+        </Box>
+      </Stack>
+    </Container>
   );
 };
 
