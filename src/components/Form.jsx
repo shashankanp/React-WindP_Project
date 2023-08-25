@@ -38,7 +38,7 @@ const Form = () => {
 
       console.log("Successful: ", response.data);
       setStatusMessage("Windmill is fired up :)");
-      setSubmissionMessage("Submitted Successfully");
+      setSubmissionMessage("Submitted Successfully!");
       reset();
 
       setTimeout(() => {
@@ -66,7 +66,7 @@ const Form = () => {
       <Stack
         direction={{ xs: "column", sm: "column", md: "row" }}
         gap={4}
-        height="95vh"
+        height={{ xs: "auto", sm: "auto", md: "95vh" }}
         width="100%"
         alignItems="center"
         justifyContent="center"
@@ -81,7 +81,19 @@ const Form = () => {
             backgroundColor: "background.default",
           }}
         >
-          <Typography variant="h5" pb={2} textAlign="center">
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: {
+                xs: "20px",
+                sm: "18px",
+                md: "24px",
+              },
+              textAlign: "center",
+              paddingBottom: { xs: 1, md: 2 },
+            }}
+          >
+            {" "}
             Please enter your Information
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,7 +146,7 @@ const Form = () => {
                 sx={{
                   color: "red",
                   mt: errors.no_turbines ? { md: 0 } : 3,
-                  mb: errors.no_turbines ? { md: 3 } : 3,
+                  mb: errors.no_turbines ? { xs: 3, md: 3 } : 3,
                 }}
               >
                 {errors.no_turbines?.message || " "}
@@ -154,14 +166,16 @@ const Form = () => {
         <Box
           sx={{
             width: { xs: "100%", md: "40%" },
-            height: { xs: "50vh", md: "90%" },
+            height: { xs: "auto", md: "auto" },
+            minHeight: { md: "90%" },
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "primary.main",
           }}
         >
-          <Stack direction="column">
+          <Stack direction="column" sx={{ flexShrink: 0 }}>
             <Typography
               variant="h6"
               align="center"
@@ -176,12 +190,12 @@ const Form = () => {
               autoplay
               speed={speed}
               key={speed}
-              style={{ width: "100%", height: "auto" }}
+              style={{ width: "100%", height: "auto", flexShrink: 0 }}
             />
             <Typography
               variant="h6"
               align="center"
-              sx={{ color: "white", mb: 2 }}
+              sx={{ color: "white", mb: 2, flexShrink: 0 }}
             >
               {submissionMessage}
             </Typography>
