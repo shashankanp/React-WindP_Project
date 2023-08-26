@@ -85,12 +85,13 @@ const Form = () => {
           gap: { md: 4 },
         }}
       >
+        {/* FORM BOX */}
         <Box
           sx={{
             flex: 1,
             padding: 3,
             paddingBottom: { xs: 0, md: 3 },
-            paddingTop: { xs: 1, md: 3 },
+            paddingTop: 3,
             backgroundColor: "background.default",
           }}
           order={{ xs: 2, md: 1 }}
@@ -112,6 +113,7 @@ const Form = () => {
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack>
+              {/* NAME INPUT */}
               <TextField
                 fullWidth
                 id="name"
@@ -137,6 +139,7 @@ const Form = () => {
                 {errors.name?.message || " "}
               </Typography>
 
+              {/* TURBINES INPUT */}
               <TextField
                 fullWidth
                 id="no_turbine"
@@ -166,17 +169,25 @@ const Form = () => {
                 {errors.no_turbines?.message || " "}
               </Typography>
 
+              {/* SUBMIT BUTTON */}
               <Button
                 fullWidth
                 variant="contained"
                 type="submit"
-                sx={{ padding: 2, fontWeight: "600", fontStyle: "bold" }}
+                sx={{
+                  padding: 2,
+                  fontWeight: "600",
+                  fontStyle: "bold",
+                  mb: { xs: 3, md: 0 },
+                }}
               >
                 <Typography variant="body1">Submit</Typography>
               </Button>
             </Stack>
           </form>
         </Box>
+
+        {/* WINDMILL BOX */}
         <Box
           sx={{
             flex: 1,
