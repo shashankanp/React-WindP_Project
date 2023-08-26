@@ -127,6 +127,7 @@ const Form = () => {
                 {...register("name", {
                   required: "Name is Required",
                   maxLength: { value: 20, message: "Max length is 20" },
+                  minLength: { value: 3, message: "Min length is 3" },
                   pattern: {
                     value: /^[A-Za-z\s]+$/i,
                     message: "Only letters are allowed",
@@ -158,6 +159,8 @@ const Form = () => {
                     value: /^\d+$/,
                     message: "Only numbers are allowed",
                   },
+                  validate: (value) =>
+                    value !== "0" ? true : "Cannot be zero",
                 })}
                 onBlur={() => trigger("no_turbines")}
                 sx={{ mt: 3 }}
