@@ -21,12 +21,14 @@ const Form = () => {
     reset,
   } = useForm();
 
-  const [statusMessage, setStatusMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState("");
-
+  const [statusMessage, setStatusMessage] = useState("");
   const [speed, setSpeed] = useState(null);
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true);
+
     try {
       setSpeed(10);
       const response = await axios.post(
@@ -58,6 +60,8 @@ const Form = () => {
         setStatusMessage("");
         setSubmissionMessage("");
       }, 5000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -113,6 +117,7 @@ const Form = () => {
                 {...register("name", {
                   required: "Name is Required",
                   maxLength: { value: 20, message: "Max length is 20" },
+                  minLength: { value: 3, message: "Min length is 3" },
                   pattern: {
                     value: /^[A-Za-z\s]+$/i,
                     message: "Only letters are allowed",
@@ -143,6 +148,10 @@ const Form = () => {
                     value: /^\d+$/,
                     message: "Only numbers are allowed",
                   },
+                  validate: (value) =>
+                    value !== "0" && value !== "00" && value !== "000"
+                      ? true
+                      : "Cannot be zero",
                 })}
                 onBlur={() => trigger("no_turbines")}
                 sx={{ mt: 3 }}
@@ -162,9 +171,12 @@ const Form = () => {
                 fullWidth
                 variant="contained"
                 type="submit"
+                disabled={isSubmitting}
                 sx={{ padding: 2, fontWeight: "600", fontStyle: "bold" }}
               >
-                <Typography variant="body1">Submit</Typography>
+                <Typography variant="body1">
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </Typography>
               </Button>
             </Stack>
           </form>
