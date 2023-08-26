@@ -28,13 +28,13 @@ const Form = () => {
 
   const onSubmit = async (data) => {
     try {
+      setSpeed(10);
       const response = await axios.post(
         "https://europe-west1-octue-amy.cloudfunctions.net/frontend-developer-case-study",
         {
           message: data,
         }
       );
-      setSpeed(10);
 
       console.log("Successful: ", response.data);
       setStatusMessage("Windmill is fired up :)");
@@ -65,7 +65,7 @@ const Form = () => {
     <Container>
       <Stack
         direction={{ xs: "column", sm: "column", md: "row" }}
-        gap={4}
+        gap={{ md: 4 }}
         height={{ xs: "auto", sm: "auto", md: "95vh" }}
         width="100%"
         alignItems="center"
@@ -77,9 +77,15 @@ const Form = () => {
           sx={{
             width: { xs: "100%", md: "40%" },
             padding: 3,
+            paddingBottom: { xs: 0, md: 3 },
+            paddingTop: { xs: 5, md: 3 },
             boxShadow: 3,
+            // border: "1px solid black",
             backgroundColor: "background.default",
           }}
+          // position={{ xs: "absolute", md: "static" }}
+          // bottom={{ xs: 2 }}
+          order={{ xs: 2, md: 1 }}
         >
           <Typography
             variant="h6"
@@ -165,7 +171,7 @@ const Form = () => {
         </Box>
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" },
+            width: { xs: "70%", md: "40%" },
             height: { xs: "auto", md: "auto" },
             minHeight: { md: "90%" },
             display: "flex",
@@ -174,6 +180,7 @@ const Form = () => {
             justifyContent: "center",
             backgroundColor: "primary.main",
           }}
+          order={{ xs: 1, md: 2 }}
         >
           <Stack direction="column" sx={{ flexShrink: 0 }}>
             <Typography
