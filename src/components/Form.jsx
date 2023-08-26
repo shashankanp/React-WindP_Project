@@ -160,7 +160,9 @@ const Form = () => {
                     message: "Only numbers are allowed",
                   },
                   validate: (value) =>
-                    value !== "0" ? true : "Cannot be zero",
+                    value !== "0" && value !== "00" && value !== "000"
+                      ? true
+                      : "Cannot be zero",
                 })}
                 onBlur={() => trigger("no_turbines")}
                 sx={{ mt: 3 }}
