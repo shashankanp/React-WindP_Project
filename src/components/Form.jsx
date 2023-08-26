@@ -23,10 +23,12 @@ const Form = () => {
 
   const [statusMessage, setStatusMessage] = useState("");
   const [submissionMessage, setSubmissionMessage] = useState("");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [speed, setSpeed] = useState(null);
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true);
+
     try {
       setSpeed(10);
       const response = await axios.post(
@@ -57,6 +59,8 @@ const Form = () => {
         setStatusMessage("");
         setSubmissionMessage("");
       }, 5000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -174,6 +178,7 @@ const Form = () => {
                 fullWidth
                 variant="contained"
                 type="submit"
+                disabled={isSubmitting}
                 sx={{
                   padding: 2,
                   fontWeight: "600",
@@ -181,7 +186,9 @@ const Form = () => {
                   mb: { xs: 3, md: 0 },
                 }}
               >
-                <Typography variant="body1">Submit</Typography>
+                <Typography variant="body1">
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </Typography>
               </Button>
             </Stack>
           </form>
