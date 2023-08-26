@@ -37,7 +37,6 @@ const Form = () => {
       );
 
       console.log("Successful: ", response.data);
-      setStatusMessage("Windmill is fired up :)");
       setSubmissionMessage("Submitted Successfully!");
       reset();
 
@@ -62,29 +61,38 @@ const Form = () => {
   };
 
   return (
-    <Container>
-      <Stack
-        direction={{ xs: "column", sm: "column", md: "row" }}
-        gap={{ md: 4 }}
-        height={{ xs: "auto", sm: "auto", md: "95vh" }}
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        spacing={4}
-        flex={1}
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        my: { xs: 5, md: 0 },
+      }}
+    >
+      <Box
+        sx={{
+          boxShadow: 3,
+          border: "1px solid #E0E0E0",
+          borderRadius: 2,
+          backgroundColor: "background.default",
+          display: "flex",
+          flexDirection: { xs: "column", sm: "column", md: "row" },
+          width: { xs: "100%", md: "85%" },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: { md: 4 },
+        }}
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" },
+            flex: 1,
             padding: 3,
             paddingBottom: { xs: 0, md: 3 },
-            paddingTop: { xs: 5, md: 3 },
-            boxShadow: 3,
-            // border: "1px solid black",
+            paddingTop: { xs: 1, md: 3 },
             backgroundColor: "background.default",
           }}
-          // position={{ xs: "absolute", md: "static" }}
-          // bottom={{ xs: 2 }}
           order={{ xs: 2, md: 1 }}
         >
           <Typography
@@ -171,14 +179,10 @@ const Form = () => {
         </Box>
         <Box
           sx={{
-            width: { xs: "70%", md: "40%" },
-            height: { xs: "auto", md: "auto" },
-            minHeight: { md: "90%" },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            flex: 1,
+            padding: 3,
             backgroundColor: "primary.main",
+            borderRadius: { md: "0 2px 2px 0", xs: "0 0 2px 2px" },
           }}
           order={{ xs: 1, md: 2 }}
         >
@@ -200,15 +204,20 @@ const Form = () => {
               style={{ width: "100%", height: "auto", flexShrink: 0 }}
             />
             <Typography
-              variant="h6"
+              variant="h5"
               align="center"
-              sx={{ color: "white", mb: 2, flexShrink: 0 }}
+              sx={{
+                color: "white",
+                mb: 2,
+                flexShrink: 0,
+                height: "1.5em",
+              }}
             >
               {submissionMessage}
             </Typography>
           </Stack>
         </Box>
-      </Stack>
+      </Box>
     </Container>
   );
 };
